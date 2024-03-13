@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, ConflictException, Controller, Post } from '@nestjs/common';
+
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthDTO } from 'src/auth/dto/authDto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+  @Post('/signup')
+  async signup(@Body() authDTO: AuthDTO.SignUp) {
+    const { email, nickname } = authDTO;
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+    const hasEmail = await this.userService.findByEmail(email);
+    if (hasEmail) {
+      throw new ConflictException('이미 사용중인 이메일 입니다.');
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
+    const hasNickname = await this.userService.findByNickname(nickname);
+    if (hasNickname) {
+      throw new ConflictException('이미 사용중인 닉네임 입니다.');
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
+    const userEntity = await this.userService.create(authDTO);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return '회원가입성공';
   }
 }

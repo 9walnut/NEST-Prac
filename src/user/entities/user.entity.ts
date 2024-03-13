@@ -1,4 +1,3 @@
-import * as bcrypt from 'bcrypt';
 import {
   BeforeInsert,
   Column,
@@ -9,8 +8,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import * as bcrypt from 'bcrypt';
+
 @Entity({ name: 'user' })
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
