@@ -1,7 +1,18 @@
-import { Body, ConflictException, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { AuthDTO } from 'src/auth/dto/authDto';
+import { UserEntity } from './entities/user.entity';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -24,5 +35,12 @@ export class UserController {
     const userEntity = await this.userService.create(authDTO);
 
     return '회원가입성공';
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/')
+  async getProfile(@Req() req: any) {
+    const user = req.user;
+    return user;
   }
 }

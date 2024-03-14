@@ -10,13 +10,15 @@ import {
 
 import { JwtService } from '@nestjs/jwt/dist';
 import * as bcrypt from 'bcrypt';
-
-import { AuthDTO } from './dto/authDto';
+import { AuthDTO } from 'src/auth/dto/auth.dto';
 import { UserService } from 'src/user/user.service';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Post('/signin')
   async signin(@Body() authDTO: AuthDTO.SignIn) {
@@ -32,6 +34,12 @@ export class AuthController {
       throw new UnauthorizedException('이메일 또는 비밀번호를 확인해 주세요.');
     }
 
-    return '로그인 완료';
+    const payload = {
+      id: user.id,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return accessToken;
   }
 }
