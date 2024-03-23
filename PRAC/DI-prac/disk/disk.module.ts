@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { DiskService } from './disk.service';
-import { PowerModule } from 'src/power/power.module';
+import { PowerModule } from 'DI-prac/power/power.module';
 
 @Module({
   imports: [PowerModule],
