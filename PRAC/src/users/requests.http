@@ -7,3 +7,20 @@ Content-Type: application/json
   "email": "asdf@asdf",
   "passowrd": "asdfdfgh"
 }
+
+### Find a particular user iwth a given ID
+GET https://localhost:3000/auth/12342134
+
+### Find all users with a given email
+GET http://localhost:3000/auth?email=asdf@adsf.com
+
+### Delete a user given id
+DELETE http://localhost:3000/auth/1
+
+### Update a user
+PATCH http://localhost:3000/auth/2
+Content-Type: application/json
+
+{
+  "email" : "aaa@aaa.com"
+}
