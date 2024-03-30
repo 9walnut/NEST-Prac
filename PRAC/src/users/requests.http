@@ -8,6 +8,12 @@ Content-Type: application/json
   "passowrd": "asdfdfgh"
 }
 
+### Get the currently signed in user
+GET http://localhost:3000/auth/whoami
+
+### Sign out
+POST http://localhost:3000/auth/signout
+
 ### Find a particular user iwth a given ID
 GET https://localhost:3000/auth/12342134
 

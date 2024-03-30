@@ -35,6 +35,16 @@ export class UsersController {
     return session.color;
   }
 
+  @Get('/whoami')
+  whoAmI(@Session() session: any) {
+    return this.usersService.findOne(session.userId);
+  }
+
+  @Post('/signout')
+  singOut(@Session() session: any) {
+    session.userId = null;
+  }
+
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
     // console.log(body);
