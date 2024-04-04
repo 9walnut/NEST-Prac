@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Report } from './reports/report.entity';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
+const cookieSession = require('cookie-session');
 
 @Module({
   imports: [
@@ -16,5 +18,26 @@ import { ReportsModule } from './reports/reports.module';
     UsersModule,
     ReportsModule,
   ],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+      }),
+    },
+  ],
 })
-export class AppModule {}
+
+// 전체 들어오는 요청에 대해 모두 처리
+// 전역적인 범위의 미들웨어
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        cookieSession({
+          keys: ['asdfasdf'],
+        }),
+      )
+      .forRoutes('*');
+  }
+}
